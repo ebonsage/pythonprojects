@@ -1,5 +1,7 @@
 #! python3
-import re, pyperclip, sys, pprint
+#coreyjones
+
+import re, pyperclip, pprint
 
 #campus directory filetype:pdf
 #TODO: Create a regex for phone numbers and emails, etc.
@@ -8,9 +10,9 @@ phoneRegex = re.compile(r'''
 # +55-5-5555555, +55-5-555-, +5555555-5555, +55-55-5555-, +55555555555, +55 555 555 55, +55 5 5555
 (
 \(?(\d\d\d)\)?         # ((\d\d\d)|(\(\d\d\d\)))? area code (optional)
-[ -]?                          # (\s|-) first separator
+[ -]+                          # (\s|-) first separator
 (\d\d\d)                          # \d\d\d first 3 digits
-[ -]?                              # - separator
+[ -]+                              # - separator
 (\d\d\d\d)                         # \d\d\d\d last 4 digits
  
 )
