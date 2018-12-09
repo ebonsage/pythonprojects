@@ -129,13 +129,13 @@ shellFile.close()
 pprint.pprint("shutils examples -->")
 
 os.chdir('c:\\delicious')
-shutil.copy('c:\\delicious\\moving.txt', 'c:\\delicious\\cate\\pie\\moved.txt') 
+#shutil.copy('c:\\delicious\\moving.txt', 'c:\\delicious\\cate\\pie\\moved.txt') 
 #to copy a file and rename it specify the file name in the dest.
 
 #shutil.move('c:\\delicious\\cate\\moved.txt', 'c:\\delicious\\cate\\pie')
 #move file and rename files
 
-send2trash.send2trash('c:\\delicious\\cate\\pie\\moved.txt')
+#send2trash.send2trash('c:\\delicious\\cate\\pie\\moved.txt')
 
 #shutil.copytree('c:\\delicious', 'c:\\delicious.bak')
 #copy a folder and its contents.
@@ -177,3 +177,29 @@ for folderName, subfolders, fileName in takp:
     pprint.pprint('The folder is ' + str(folderName) + ' foldername.')
     pprint.pprint('The folder is ' + str(subfolders) + ' subfolders.')
     pprint.pprint('The folder is ' + str(fileName) + ' filename.')
+    print()
+    print()
+    print('The folder is ' + folderName)
+    print('The subfolder in ' + folderName + ' are:' + str(subfolders))
+    print('The filenames in ' + folderName + ' are:' + str(fileName))
+    
+    for subfolder in subfolders:
+        print(subfolder)
+        #os.unlink(subfolder) #delete all files in that folder
+        
+        for subfolder in subfolders:
+            if 'fish' in subfolder:
+                #os.rmdir(subfolder)
+                print('rmdir on ' + subfolder)
+                
+        for file in fileName:
+            if file.endswith(''):
+                gone = os.path.join(folderName, file + '.backup')
+                #shutil.copy(os.path.join(folderName, file), gone )
+                pprint.pprint('Copying ' + file + ' to: ' + gone)
+                
+        
+        
+#####
+print()
+
