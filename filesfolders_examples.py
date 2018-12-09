@@ -1,4 +1,4 @@
-import os, pprint, random
+import os, pprint, random, shelve, shutil, send2trash
 #coreyjones
 
 ########################################################
@@ -9,7 +9,7 @@ pprint.pprint(expath)
 
 #current working directory os.getcwd()
 
-pwd = os.getcwd()
+pwd = os.getcwd()   
 pprint.pprint(pwd)
 
 
@@ -96,9 +96,84 @@ if os.path.isdir(cdir):
         pprint.pprint('File Exists')
     else:
         pprint.pprint(mek)
-        os.makedirs(mek)
+        #os.makedirs(mek)
 
 
 
+########################################################
+pprint.pprint("shelve examples -->")
+
+os.chdir('c:\\delicious')
+
+shellFile = shelve.open('mydata')
+
+#store data or write to file
+shellFile['cats'] = ['zophie', 'Pooka', 'Simon', 'Fat-tail', 'Cleo' ]
+
+shellFile.close()
+
+shellFile = shelve.open('mydata')
+
+#grab data
+pprint.pprint(shellFile['cats'])
+
+shellFile.close()
+
+shellFile = shelve.open('mydata')
+pprint.pprint(list(shellFile.keys()))
+pprint.pprint(list(shellFile.values()))
+shellFile.close()
 
 
+########################################################
+pprint.pprint("shutils examples -->")
+
+os.chdir('c:\\delicious')
+shutil.copy('c:\\delicious\\moving.txt', 'c:\\delicious\\cate\\pie\\moved.txt') 
+#to copy a file and rename it specify the file name in the dest.
+
+#shutil.move('c:\\delicious\\cate\\moved.txt', 'c:\\delicious\\cate\\pie')
+#move file and rename files
+
+send2trash.send2trash('c:\\delicious\\cate\\pie\\moved.txt')
+
+#shutil.copytree('c:\\delicious', 'c:\\delicious.bak')
+#copy a folder and its contents.
+
+
+
+########################################################
+pprint.pprint("deleting files and folders examples --> ")
+
+
+os.chdir('c:\\delicious')
+pprint.pprint(os.getcwd())
+#os.unlink('C:\delicious.bak\\cate\\bacon.txt') #delte fiels
+#os.rmdir('C:\delicious.bak\\cate\\pie\\cherry') 
+#removes an empty directory
+
+
+#shutil.rmtree('c:\\delicious')
+#remove files and folders
+
+for filename in os.listdir():
+    if filename.endswith(''):
+        #os.unlink(filename)
+        pprint.pprint(filename)
+        
+
+######### send2trash
+        
+#send2trash.send2trash('c:\\delicious\\cate\\pie\\moving.txt')
+
+########################################################
+pprint.pprint("walking the directory tree examples -->")
+
+
+takp = os.walk('c:\\delicious')
+pprint.pprint(takp)
+
+for folderName, subfolders, fileName in takp:
+    pprint.pprint('The folder is ' + str(folderName) + ' foldername.')
+    pprint.pprint('The folder is ' + str(subfolders) + ' subfolders.')
+    pprint.pprint('The folder is ' + str(fileName) + ' filename.')

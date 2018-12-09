@@ -24,3 +24,6 @@ cramp.close()
 cramp = open(stomp, 'r+')
 
 pprint.pprint(cramp.read())
+
+
+
