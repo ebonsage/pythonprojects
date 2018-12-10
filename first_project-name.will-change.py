@@ -45,15 +45,32 @@ def snapPage(url):
         newList = list(i)
 
     print(newList[1])
-    url = newList[1]
-    return pic, url
+    xurl = newList[1]
+    
+    url = 'http:' + xurl
+    print(pic, url)
+    
+    #return pic, url
         
 
-snapPage(mainUrl)
+#snapPage(mainUrl)
 #beginDownload.parsePage()
 
-
-
+#----------------------------------------------------------------------
+def downLoadPic(pic, url):
+    """Download pic to hdd"""
+    getPic = requests.get(url)
+    getPic.raise_for_status()
+    
+    regexFileName = re.compile(r'((?=\w+\.\w{3,4}$).+)')
+    xfileName = regexFileName.search(url)
+    fileName = xfileName.group()
+    
+    r = requests.get(url, stream=True)
+    if r.status_code == 200:
+        with open(fileName, 'wb') as f:
+            for chunk in r:
+                f.write(chunk)        
 
 
 #firgure html for image
@@ -61,3 +78,9 @@ snapPage(mainUrl)
 #parse for forward or back link
 #grab url from previous page
 #goto that new url and repeat
+
+
+#downLoadPic(snapPage(mainUrl))
+#snapPage(mainUrl)
+downLoadPic("firstPic", "http://imgs.xkcd.com/comics/circuit_diagram.png")
+
