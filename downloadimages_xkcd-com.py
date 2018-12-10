@@ -12,8 +12,8 @@ import os, sys, requests, bs4, re, pprint
 mainUrl = 'https://xkcd.com'
 downloadFolder = 'C:\\picbot'
 swapFile = '%s\\pic_names.txt' % (downloadFolder)
-url = ''
-pic = ''
+#url = ''
+#pic = ''
 
 #----------------------------------------------------------------------
 def main():
@@ -76,6 +76,7 @@ def downLoadPic(pic, url):
     r = requests.get(url, stream=True)
     if r.status_code == 200:
         with open(fileName, 'wb') as f:
+            pprint.pprint('Downloading... '+ fileName)
             for chunk in r:
                 f.write(chunk)
             f.close()
