@@ -3,9 +3,9 @@
 import os, sys, requests, bs4, re, pprint
 
 
-mainUrl = 'https://xkcd.com/730/'
+mainUrl = 'https://xkcd.com/2058/'
 downloadFolder = 'C:\\picbot'
-swapFile = '%s\\swap.txt' % (downloadFolder)
+swapFile = '%s\\pic_names.txt' % (downloadFolder)
 url = []
 
 if not os.path.exists(downloadFolder):
@@ -17,8 +17,10 @@ os.chdir(downloadFolder)
 pwd = os.getcwd()   
 pprint.pprint(pwd)
 
-
-    
+if not os.path.exists(swapFile):
+    swap = open(swapFile, mode='w+')
+    swap.write('BEGIN DOWNLOAD LOG' + '\n\n\n\n')
+    swap.close()
     
 #----------------------------------------------------------------------
 def snapPage(url):
@@ -34,43 +36,71 @@ def snapPage(url):
     picName = dsoup[3]
     rlink = dsoup[4]
     pic = picName.replace('"', '')
-    print("picName is: " + pic)
-    print("rlink is: " + rlink)
+    #print("picName is: " + pic)
+    #print("rlink is: " + rlink)
 
-    rough = re.compile(r'("([^"]*)")')
-    smooth = rough.findall(rlink)
-    rsmooth = list(smooth)
+    regExUrl2Filename = re.compile(r'("([^"]*)")')
+    findLink = regExUrl2Filename.findall(rlink)
     
-    for i in smooth:
+    for i in findLink:
         newList = list(i)
 
-    print(newList[1])
+    #print(newList[1])
     xurl = newList[1]
     
-    url = 'http:' + xurl
+    url = 'https:' + xurl
     print(pic, url)
     
     #return pic, url
         
 
-#snapPage(mainUrl)
-#beginDownload.parsePage()
-
 #----------------------------------------------------------------------
 def downLoadPic(pic, url):
     """Download pic to hdd"""
-    getPic = requests.get(url)
-    getPic.raise_for_status()
     
     regexFileName = re.compile(r'((?=\w+\.\w{3,4}$).+)')
     xfileName = regexFileName.search(url)
     fileName = xfileName.group()
     
-    r = requests.get(url, stream=True)
-    if r.status_code == 200:
-        with open(fileName, 'wb') as f:
-            for chunk in r:
-                f.write(chunk)        
+    #r = requests.get(url, stream=True)
+    #if r.status_code == 200:
+        #with open(fileName, 'wb') as f:
+            #for chunk in r:
+                #f.write(chunk)
+                
+    logDownLoadList = open(swapFile, mode="a+")
+    logDownLoadList.write(pic + '\t' + url + '\n')
+    logDownLoadList.close()
+    
+        
+        
+#----------------------------------------------------------------------
+def grabPrevURL(url):
+    """Grab the Next URL"""
+
+    res = requests.get(url)
+    res.raise_for_status()
+    
+    soup = bs4.BeautifulSoup(res.text, 'html.parser')
+    prevURL = str(soup.select("ul.comicNav"))
+
+    #pprint.pprint(prevURL)
+    
+    aTags = soup.find_all(re.compile("^a"))
+    bTags = aTags[7]
+    
+    pprint.pprint(bTags)
+    pprint.pprint(type(bTags))
+    test = str(bTags)
+    pprint.pprint(test)
+    regexPreUrl = re.compile(r'(\/\d{1,8}\/)')
+    xPreUrl = regexPreUrl.search(test)
+    print(xPreUrl)
+    preUrl = xPreUrl.group()    
+    pprint.pprint(preUrl)
+    print('https://xkcd.com' + preUrl)
+    return 'https://xkcd.com' + preUrl
+
 
 
 #firgure html for image
@@ -82,5 +112,5 @@ def downLoadPic(pic, url):
 
 #downLoadPic(snapPage(mainUrl))
 #snapPage(mainUrl)
-downLoadPic("firstPic", "http://imgs.xkcd.com/comics/circuit_diagram.png")
-
+#downLoadPic("firstPic", "http://imgs.xkcd.com/comics/circuit_diagram.png")
+grabPrevURL(mainUrl)
