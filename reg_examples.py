@@ -46,7 +46,7 @@ pprint.pprint(mo2)
 
 
 ###################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 1")
 message2 = 'Call me (415)555-5896 tomorrow, or at \
     (415)585-9865 at my office line'
 
@@ -62,7 +62,7 @@ pprint.pprint(momo2)
 
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 2")
 
 batRegex = re.compile(r'Bat(man|mobile|copter|bat)')
 momomo = batRegex.search('Batman lost the Batmobile and crashed into the Batcopter')
@@ -72,7 +72,7 @@ pprint.pprint(momomo2)
 
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 3")
 
 message3 = "The Adventures of Superman and Superwoman"
 # ? match the preceding group 1 or more times
@@ -81,7 +81,7 @@ so = superRegex.search(message3)
 pprint.pprint(so.group())
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 4")
 
 phoneNumReggie = re.compile(r'\d\d\d-\d\d\d\-\d\d\d\d')
 
@@ -91,7 +91,7 @@ to = phoneNumReggie.search('My phone number is 415-555-1234 \
 pprint.pprint(to.group())
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 5")
 
 message4 = 'Call me 415-555-5896 tomorrow, or at \
     415 585-9865 at my office line'
@@ -104,7 +104,7 @@ pprint.pprint(tand)
 
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 6")
 
 message3 = "The Adventures of Superwowowowowowowoman and Superman"
 # * match the preceding group 0 or more times
@@ -114,7 +114,7 @@ pprint.pprint(so.group())
 
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 7")
 
 message3 = "The Adventures of Superman and Superwoman"
 # ?  match the preceding group 0 or 1 more times
@@ -125,7 +125,7 @@ pprint.pprint(so.group())
 
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 8")
 
 message5 = "He said 'HaHaHa'"
 message6 = ""
@@ -138,7 +138,7 @@ tator = haRegex.search(message5)
 pprint.pprint(tator) 
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 9")
 
 digitRegex = re.compile(r'(\d){3,5}') #greedy match
 print(digitRegex.search('1234567890'))
@@ -148,7 +148,7 @@ print(digitRegex.search('1234567890'))
 
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 10")
 
 
 message7 = 'Call me 415-555-5896 tomorrow, or at \
@@ -170,7 +170,7 @@ for i in cook:
     
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 11")
 
 lyrics = """On the twelfth day of Christmas my true love sent to me: \
 12 Drummers Drumming, 11 Pipers Piping, 10 Lords a Leaping, \
@@ -187,7 +187,7 @@ pprint.pprint(pepe)
 
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 12")
 
 #create your own
 
@@ -200,7 +200,7 @@ poop = vowelRegex.findall(lyrics)
 pprint.pprint(poop)
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 13")
 
 medtt = "Hello there!"
 medtt2 = "He said, 'Hello!"
@@ -213,7 +213,7 @@ print(terr2)
 
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 14")
 
 temem = "On top of the world!"
 
@@ -223,7 +223,7 @@ peope = endsWithWorldRegex.search(temem)
 print(temem)
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 15")
 
 
 sldkl = '980438903490835'
@@ -233,7 +233,7 @@ meoe = allDigitsRegex.search(sldkl)
 print(meoe)
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 16")
 
 emeo = 'The cat in the hat sat on the flat mat'
 emeo2 = 'First Name: Al Last Name: Sweigart'
@@ -276,7 +276,7 @@ memep = vowelRegex2.findall(fourlyrics)
 print(memep)
 
 ########################################################
-#pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 17")
 
 #FIND AND REPLACE METHODS
 chame = 'Agent Alice gave the secret documents to Agent Bob'
@@ -292,7 +292,7 @@ print(drink)
 
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 18")
 
 namesRegex2 = re.compile(r'Agent (\w)\w*')
 eat2 = namesRegex2.findall(chame)
@@ -301,7 +301,7 @@ drink2 = namesRegex2.sub(r'Agent \1*****', chame)
 print(drink2)
 
 ########################################################
-pprint.pprint("THIS IS A NEW INSTANCE BELOW")
+pprint.pprint("THIS IS A NEW INSTANCE BELOW 19")
 
 re.compile(r'''
 (\d\d\d)        # Area Code
