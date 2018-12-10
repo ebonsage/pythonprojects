@@ -78,9 +78,9 @@ def snapPage(url):
     except:
         raise Exception("can't find name")        
             
-
     
-    picName = pn
+    netpic = pn[4:]
+    picName = netpic
     rlink = ln
     pic = picName.replace('"', '')
     print("picName is: " + pic)
@@ -168,14 +168,6 @@ def grabPrevURL(url):
     #print('https://xkcd.com' + preUrl)
     
     return 'https://xkcd.com' + preUrl
-
-
-
-
-
-
-
-    
 
 
 
