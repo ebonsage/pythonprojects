@@ -35,7 +35,8 @@ def main():
 #----------------------------------------------------------------------
 def snapPage(url):
     """Pull current page"""
-    res = requests.get(mainUrl)
+    
+    res = requests.get(url)
     res.raise_for_status()         
 
     soup = bs4.BeautifulSoup(res.text, 'html.parser')
@@ -43,23 +44,60 @@ def snapPage(url):
     pprint.pprint(csoup)
     
     dsoup = csoup.split(" ") #create a list
-    picName = dsoup[3]
-    rlink = dsoup[4]
+    
+    try:
+        for i in range(len(dsoup)):
+            #find link
+            print(i)
+            print(dsoup[i])
+            peek = dsoup[i]
+            suffix = 'png"'
+            if peek.endswith(suffix):
+                ln = peek
+                print(ln)
+            else:
+                continue
+        
+    except:
+        raise Exception("can't find link")
+        
+
+    try:
+        for j in range(len(dsoup)):
+            #find picture name
+            #print(j)
+            #print(dsoup[j])
+            look = dsoup[j]
+            suffix = 'alt="'
+            if look.startswith(suffix):
+                pn = look
+                print(pn)
+            else:
+                continue
+        
+    except:
+        raise Exception("can't find name")        
+            
+
+    
+    picName = pn
+    rlink = ln
     pic = picName.replace('"', '')
-    #print("picName is: " + pic)
-    #print("rlink is: " + rlink)
+    print("picName is: " + pic)
+    print("rlink is: " + rlink)
 
     regExUrl2Filename = re.compile(r'("([^"]*)")')
     findLink = regExUrl2Filename.findall(rlink)
+    print("This FIndLink " + str(findLink))
     
     for i in findLink:
         newList = list(i)
 
-    #print(newList[1])
+    print("NEW LIST HERE " + newList[1])
     xurl = newList[1]
     
     url = 'https:' + xurl
-    #print(pic, url)
+    print(pic, url)
     return pic, url
         
 
@@ -84,7 +122,8 @@ def downLoadPic(pic, url):
     logDownLoadList = open(swapFile, mode="a+")
     logDownLoadList.write(pic + '\t' + url + '\n')
     logDownLoadList.close()
-    
+    pwd = os.getcwd()
+    pprint.pprint(pwd)
     if os.path.exists(fileName):
         return True
     else:
@@ -136,7 +175,7 @@ def grabPrevURL(url):
 
 
 
-#snapPage(mainUrl)
+#snapPage('https://xkcd.com/2080')
 #downLoadPic("firstPic", "http://imgs.xkcd.com/comics/circuit_diagram.png")
 #grabPrevURL(mainUrl)
 
