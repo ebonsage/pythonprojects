@@ -48,13 +48,13 @@ def snapPage(url):
     try:
         for i in range(len(dsoup)):
             #find link
-            print(i)
-            print(dsoup[i])
+            #print(i)
+            #print(dsoup[i])
             peek = dsoup[i]
             suffix = 'png"'
             if peek.endswith(suffix):
                 ln = peek
-                print(ln)
+                #print(ln)
             else:
                 continue
         
@@ -71,7 +71,7 @@ def snapPage(url):
             suffix = 'alt="'
             if look.startswith(suffix):
                 pn = look
-                print(pn)
+                #print(pn)
             else:
                 continue
         
@@ -92,10 +92,14 @@ def snapPage(url):
     
     for i in findLink:
         newList = list(i)
+        
 
     print("NEW LIST HERE " + newList[1])
     xurl = newList[1]
     
+    if not xurl.startswith("//imgs.xkcd.com"):
+        xurl = "//imgs.xkcd.com/comics/mercator_projection.png"
+        
     url = 'https:' + xurl
     print(pic, url)
     return pic, url
