@@ -1,30 +1,40 @@
-#! python 3
+#!/usr/bin/env python
+#coding:utf-8
 #coreyjones
+
+"""
+  Author: coreyjones  --<>
+  Purpose: Download all pictures from https://xkcd.com and log each download
+  Created: 12/10/2018
+"""
 import os, sys, requests, bs4, re, pprint
 
-
-mainUrl = 'https://xkcd.com/2058/'
+mainUrl = 'https://xkcd.com'
 downloadFolder = 'C:\\picbot'
 swapFile = '%s\\pic_names.txt' % (downloadFolder)
-url = []
+url = ''
+pic = ''
 
-if not os.path.exists(downloadFolder):
-    os.makedirs(downloadFolder)
-
-assert os.path.isdir(downloadFolder), 'Download folder is missing! ' + str(downloadFolder)
-
-os.chdir(downloadFolder)
-pwd = os.getcwd()   
-pprint.pprint(pwd)
-
-if not os.path.exists(swapFile):
-    swap = open(swapFile, mode='w+')
-    swap.write('BEGIN DOWNLOAD LOG' + '\n\n\n\n')
-    swap.close()
+#----------------------------------------------------------------------
+def main():
+    """"""
+    if not os.path.exists(downloadFolder):
+        os.makedirs(downloadFolder)
     
+    assert os.path.isdir(downloadFolder), 'Download folder is missing! ' + str(downloadFolder)
+    
+    os.chdir(downloadFolder)
+    pwd = os.getcwd()   
+    #pprint.pprint(pwd)
+    
+    if not os.path.exists(swapFile):
+        swap = open(swapFile, mode='w+')
+        swap.write('BEGIN DOWNLOAD LOG' + '\n\n\n\n')
+        swap.close()
+        
 #----------------------------------------------------------------------
 def snapPage(url):
-    """Pull current page and save to a file"""
+    """Pull current page"""
     res = requests.get(mainUrl)
     res.raise_for_status()         
 
@@ -49,9 +59,8 @@ def snapPage(url):
     xurl = newList[1]
     
     url = 'https:' + xurl
-    print(pic, url)
-    
-    #return pic, url
+    #print(pic, url)
+    return pic, url
         
 
 #----------------------------------------------------------------------
@@ -62,16 +71,24 @@ def downLoadPic(pic, url):
     xfileName = regexFileName.search(url)
     fileName = xfileName.group()
     
-    #r = requests.get(url, stream=True)
-    #if r.status_code == 200:
-        #with open(fileName, 'wb') as f:
-            #for chunk in r:
-                #f.write(chunk)
+    pprint.pprint(fileName)
+    
+    r = requests.get(url, stream=True)
+    if r.status_code == 200:
+        with open(fileName, 'wb') as f:
+            for chunk in r:
+                f.write(chunk)
+            f.close()
                 
     logDownLoadList = open(swapFile, mode="a+")
     logDownLoadList.write(pic + '\t' + url + '\n')
     logDownLoadList.close()
     
+    if os.path.exists(fileName):
+        return True
+    else:
+        return False
+        
         
         
 #----------------------------------------------------------------------
@@ -89,28 +106,60 @@ def grabPrevURL(url):
     aTags = soup.find_all(re.compile("^a"))
     bTags = aTags[7]
     
-    pprint.pprint(bTags)
-    pprint.pprint(type(bTags))
-    test = str(bTags)
-    pprint.pprint(test)
+    #pprint.pprint(bTags)
+    #pprint.pprint(type(bTags))
+    
+    xbx = str(bTags)
+    
+    #pprint.pprint(xbx)
+    
     regexPreUrl = re.compile(r'(\/\d{1,8}\/)')
-    xPreUrl = regexPreUrl.search(test)
-    print(xPreUrl)
+    xPreUrl = regexPreUrl.search(xbx)
+    
+    #print(xPreUrl)
+    
     preUrl = xPreUrl.group()    
     pprint.pprint(preUrl)
-    print('https://xkcd.com' + preUrl)
+    
+    #print('https://xkcd.com' + preUrl)
+    
     return 'https://xkcd.com' + preUrl
 
 
 
-#firgure html for image
-#requst to downlaod the image
-#parse for forward or back link
-#grab url from previous page
-#goto that new url and repeat
 
 
-#downLoadPic(snapPage(mainUrl))
+
+
+    
+
+
+
 #snapPage(mainUrl)
 #downLoadPic("firstPic", "http://imgs.xkcd.com/comics/circuit_diagram.png")
-grabPrevURL(mainUrl)
+#grabPrevURL(mainUrl)
+
+
+
+if __name__ == '__main__':
+    main()
+    
+    pic, url = snapPage(mainUrl)
+    print(pic + ' ' + url)
+    cont = downLoadPic(pic, url)
+    nextUrl = grabPrevURL(mainUrl)
+
+        
+    while cont == True:
+        print(nextUrl)
+        pic, url = snapPage(nextUrl)
+        print(pic + ' ' + url)
+        cont = downLoadPic(pic, url)
+        print(cont)
+        nextUrl = grabPrevURL(nextUrl)
+        print(nextUrl)
+
+        
+        
+    
+    
