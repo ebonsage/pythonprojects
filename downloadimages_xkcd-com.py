@@ -12,22 +12,15 @@ import os, sys, requests, bs4, re, pprint, logging
 mainUrl = 'https://xkcd.com'
 downloadFolder = 'C:\\picbot'
 swapFile = '%s\\pic_names.txt' % (downloadFolder)
-logging.disable(logging.DEBUG)
-logging.basicConfig(filename='myProgramLog.txt', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-#logging.DEBUG
-#logging.INFO
-#logging.WARNING
-#logging.ERROR
-#logging.CRITICAL
-
+loggingFile = '%s\\myProgramDEBUGLog.txt' % downloadFolder
 
 #----------------------------------------------------------------------
 def main():
     """"""
     if not os.path.exists(downloadFolder):
         os.makedirs(downloadFolder)
-    else:
-        logging.critical('Couldn\'t create folder; doesent exist:  %s' % (downloadFolder))
+    #else:
+        #logging.critical('Couldn\'t create folder; doesent exist:  %s' % (downloadFolder))
 
     
     assert os.path.isdir(downloadFolder), 'Download folder is missing; doesn\'t exist: ' + str(downloadFolder)
@@ -36,12 +29,31 @@ def main():
     pwd = os.getcwd()   
     #pprint.pprint(pwd)
     
-    if not os.path.exists(swapFile):
+    if not os.path.exists(swapFile):   
         swap = open(swapFile, mode='w+')
         swap.write('BEGIN DOWNLOAD LOG' + '\n\n\n\n')
         swap.close()
-    else:
-        logging.critical('Couldn\'t create file:  %s' % (swapFile))    
+    #else:
+        #logging.critical('Couldn\'t create file:  %s' % (swapFile))
+        #raise Exception("Could Not create Download Log File") 
+    
+    if not os.path.exists(loggingFile):    
+        swap = open(loggingFile, mode='w+')
+        swap.write('BEGIN DEBUG LOG' + '\n\n\n\n')
+        swap.close()
+    #else:
+        #logging.critical('Couldn\'t create file:  %s' % (loggingFile))
+        #raise Exception("Could Not create Log File") 
+        
+    logging.disable(logging.DEBUG)
+    logging.basicConfig(filename='loggingFile', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    #logging.DEBUG
+    #logging.INFO
+    #logging.WARNING
+    #logging.ERROR
+    #logging.CRITICAL
+    
+            
 #----------------------------------------------------------------------
 def snapPage(url):
     """Pull current page"""
@@ -157,28 +169,25 @@ def grabPrevURL(url):
     soup = bs4.BeautifulSoup(res.text, 'html.parser')
     prevURL = str(soup.select("ul.comicNav"))
 
-    #pprint.pprint(prevURL)
+    logging.debug('prevURL: %s' % (prevURL))
     
     aTags = soup.find_all(re.compile("^a"))
     bTags = aTags[7]
     
-    #pprint.pprint(bTags)
-    #pprint.pprint(type(bTags))
-    
+    logging.debug('bTags: %s' % (bTags))
     xbx = str(bTags)
     
-    #pprint.pprint(xbx)
+    logging.debug('xbx: %s' % (xbx))
     
     regexPreUrl = re.compile(r'(\/\d{1,8}\/)')
     xPreUrl = regexPreUrl.search(xbx)
     
-    #print(xPreUrl)
+    logging.debug('xPreUrl: %s' % (xPreUrl))
     
-    preUrl = xPreUrl.group()    
-    pprint.pprint(preUrl)
+    preUrl = xPreUrl.group()  
+    logging.debug('preUrl: %s' % (preUrl))
     
-    #print('https://xkcd.com' + preUrl)
-    
+    logging.debug('https://xkcd.com%s' % (preUrl))
     return 'https://xkcd.com' + preUrl
 
 
@@ -193,19 +202,20 @@ if __name__ == '__main__':
     main()
     
     pic, url = snapPage(mainUrl)
-    print(pic + ' ' + url)
+    logging.debug('PIC: %s -- URL: %s' % (pic, url))
     cont = downLoadPic(pic, url)
     nextUrl = grabPrevURL(mainUrl)
 
         
     while cont == True:
-        print(nextUrl)
+        logging.debug('grabing set nextUrl: %s' % (nextUrl))
         pic, url = snapPage(nextUrl)
-        print(pic + ' ' + url)
+        logging.debug('grabbed PIC: %s -from- URL: %s' % (pic, url))
         cont = downLoadPic(pic, url)
-        print(cont)
+        logging.debug('bool value of cont: %s' % (cont))
         nextUrl = grabPrevURL(nextUrl)
-        print(nextUrl)
+        logging.debug('setting nextUrl: %s' % (nextUrl))
+
 
         
         
