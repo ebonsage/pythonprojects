@@ -7,21 +7,30 @@
   Purpose: Download all pictures from https://xkcd.com and log each download
   Created: 12/10/2018
 """
-import os, sys, requests, bs4, re, pprint
+import os, sys, requests, bs4, re, pprint, logging
 
 mainUrl = 'https://xkcd.com'
 downloadFolder = 'C:\\picbot'
 swapFile = '%s\\pic_names.txt' % (downloadFolder)
-#url = ''
-#pic = ''
+logging.disable(logging.DEBUG)
+logging.basicConfig(filename='myProgramLog.txt', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+#logging.DEBUG
+#logging.INFO
+#logging.WARNING
+#logging.ERROR
+#logging.CRITICAL
+
 
 #----------------------------------------------------------------------
 def main():
     """"""
     if not os.path.exists(downloadFolder):
         os.makedirs(downloadFolder)
+    else:
+        logging.critical('Couldn\'t create folder; doesent exist:  %s' % (downloadFolder))
+
     
-    assert os.path.isdir(downloadFolder), 'Download folder is missing! ' + str(downloadFolder)
+    assert os.path.isdir(downloadFolder), 'Download folder is missing; doesn\'t exist: ' + str(downloadFolder)
     
     os.chdir(downloadFolder)
     pwd = os.getcwd()   
@@ -31,7 +40,8 @@ def main():
         swap = open(swapFile, mode='w+')
         swap.write('BEGIN DOWNLOAD LOG' + '\n\n\n\n')
         swap.close()
-        
+    else:
+        logging.critical('Couldn\'t create file:  %s' % (swapFile))    
 #----------------------------------------------------------------------
 def snapPage(url):
     """Pull current page"""
@@ -48,14 +58,15 @@ def snapPage(url):
     try:
         for i in range(len(dsoup)):
             #find link
-            #print(i)
-            #print(dsoup[i])
+            logging.debug('The contents of soup are: %s' % (dsoup))
+            logging.debug('soup index %s: ' % (dsoup[i]))
             peek = dsoup[i]
             suffix = 'png"'
             if peek.endswith(suffix):
                 ln = peek
-                #print(ln)
+                logging.error('ln is %s ' % (ln))
             else:
+                logging.warning('Couldn\'t find file name ending in:  %s' % (suffix))
                 continue
         
     except:
@@ -65,43 +76,43 @@ def snapPage(url):
     try:
         for j in range(len(dsoup)):
             #find picture name
-            #print(j)
-            #print(dsoup[j])
+            logging.debug('The contents of soup are: %s' % (dsoup))
+            logging.debug('soup index %s: ' % (dsoup[j]))
             look = dsoup[j]
             suffix = 'alt="'
             if look.startswith(suffix):
                 pn = look
-                #print(pn)
+                logging.error('ln is %s ' % (ln))
             else:
+                logging.warning('Couldn\'t find file name starting in:  %s' % (suffix))
                 continue
         
     except:
-        raise Exception("can't find name")        
+        logging.info('Couldn\'t find file name from link.')        
             
     
     netpic = pn[4:]
     picName = netpic
     rlink = ln
     pic = picName.replace('"', '')
-    print("picName is: " + pic)
-    print("rlink is: " + rlink)
+    logging.debug('picName is: %s' % (pic))
+    logging.debug('rlink is: %s: ' % (rlink))
 
     regExUrl2Filename = re.compile(r'("([^"]*)")')
     findLink = regExUrl2Filename.findall(rlink)
-    print("This FIndLink " + str(findLink))
+    logging.debug('FindLink is: %s' % str((findLink)))
     
     for i in findLink:
         newList = list(i)
         
-
-    print("NEW LIST HERE " + newList[1])
+    logging.debug('NEW LIST HERE : %s' % newList[1])
     xurl = newList[1]
     
     if not xurl.startswith("//imgs.xkcd.com"):
         xurl = "//imgs.xkcd.com/comics/mercator_projection.png"
         
     url = 'https:' + xurl
-    print(pic, url)
+    logging.debug('PIC: %s : URL: %s' % (pic, url))
     return pic, url
         
 
@@ -112,13 +123,12 @@ def downLoadPic(pic, url):
     regexFileName = re.compile(r'((?=\w+\.\w{3,4}$).+)')
     xfileName = regexFileName.search(url)
     fileName = xfileName.group()
-    
-    pprint.pprint(fileName)
+    logging.debug('FileName: %s' % (fileName))
     
     r = requests.get(url, stream=True)
     if r.status_code == 200:
         with open(fileName, 'wb') as f:
-            pprint.pprint('Downloading... '+ fileName)
+            logging.info('Currently Downloading... %s' % (fileName))
             for chunk in r:
                 f.write(chunk)
             f.close()
@@ -127,10 +137,12 @@ def downLoadPic(pic, url):
     logDownLoadList.write(pic + '\t' + url + '\n')
     logDownLoadList.close()
     pwd = os.getcwd()
-    pprint.pprint(pwd)
+    logging.debug('Present Directory... %s' % (pwd))
     if os.path.exists(fileName):
+        logging.info('FileFound %s' % (fileName))
         return True
     else:
+        logging.info('File Not Found;  No file downloaded from the site.')
         return False
         
         
