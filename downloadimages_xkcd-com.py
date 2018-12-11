@@ -7,46 +7,42 @@
   Purpose: Download all pictures from https://xkcd.com and log each download
   Created: 12/10/2018
 """
-import os, sys, requests, bs4, re, pprint, logging
+import os, requests, bs4, re, logging
 
 mainUrl = 'https://xkcd.com'
 downloadFolder = 'C:\\picbot'
 swapFile = '%s\\pic_names.txt' % (downloadFolder)
-loggingFile = '%s\\myProgramDEBUGLog.txt' % downloadFolder
+loggingFile = '%s\\DEBUGLog.txt' % (downloadFolder)
 
 #----------------------------------------------------------------------
 def main():
     """"""
     if not os.path.exists(downloadFolder):
         os.makedirs(downloadFolder)
-    #else:
-        #logging.critical('Couldn\'t create folder; doesent exist:  %s' % (downloadFolder))
-
-    
+        
     assert os.path.isdir(downloadFolder), 'Download folder is missing; doesn\'t exist: ' + str(downloadFolder)
     
     os.chdir(downloadFolder)
-    pwd = os.getcwd()   
-    #pprint.pprint(pwd)
-    
-    if not os.path.exists(swapFile):   
+    pwd = os.getcwd()
+    logging.info('PWD:  %s' % (pwd))
+
+    if not os.path.exists(swapFile):  
         swap = open(swapFile, mode='w+')
         swap.write('BEGIN DOWNLOAD LOG' + '\n\n\n\n')
         swap.close()
-    #else:
-        #logging.critical('Couldn\'t create file:  %s' % (swapFile))
-        #raise Exception("Could Not create Download Log File") 
+    
+    assert os.path.exists(swapFile), 'Download folder is missing; doesn\'t exist: ' + str(swapFile)
     
     if not os.path.exists(loggingFile):    
         swap = open(loggingFile, mode='w+')
         swap.write('BEGIN DEBUG LOG' + '\n\n\n\n')
         swap.close()
-    #else:
-        #logging.critical('Couldn\'t create file:  %s' % (loggingFile))
-        #raise Exception("Could Not create Log File") 
         
-    logging.disable(logging.DEBUG)
-    logging.basicConfig(filename='loggingFile', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    assert os.path.exists(loggingFile), 'Download folder is missing; doesn\'t exist: ' + str(loggingFile)
+        
+    #logging.disable(logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    #logging.basicConfig(filename=loggingFile, level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
     #logging.DEBUG
     #logging.INFO
     #logging.WARNING
@@ -63,7 +59,7 @@ def snapPage(url):
 
     soup = bs4.BeautifulSoup(res.text, 'html.parser')
     csoup = str(soup.select("[id~=comic]"))
-    pprint.pprint(csoup)
+    logging.debug('soup: %s' % (soup))
     
     dsoup = csoup.split(" ") #create a list
     
@@ -74,13 +70,11 @@ def snapPage(url):
             logging.debug('soup index %s: ' % (dsoup[i]))
             peek = dsoup[i]
             suffix = 'png"'
-            if peek.endswith(suffix):
+            suffix2 = 'jpg"'
+            if peek.endswith(suffix) or peek.endswith(suffix2):
                 ln = peek
-                logging.error('ln is %s ' % (ln))
-            else:
-                logging.warning('Couldn\'t find file name ending in:  %s' % (suffix))
-                continue
-        
+                logging.info('ln is %s ' % (ln))
+                
     except:
         raise Exception("can't find link")
         
@@ -94,9 +88,9 @@ def snapPage(url):
             suffix = 'alt="'
             if look.startswith(suffix):
                 pn = look
-                logging.error('ln is %s ' % (ln))
+                logging.info('ln is %s ' % (ln))
             else:
-                logging.warning('Couldn\'t find file name starting in:  %s' % (suffix))
+                logging.info('Couldn\'t find file name starting in:  %s' % (suffix))
                 continue
         
     except:
@@ -137,6 +131,7 @@ def downLoadPic(pic, url):
     fileName = xfileName.group()
     logging.debug('FileName: %s' % (fileName))
     
+    
     r = requests.get(url, stream=True)
     if r.status_code == 200:
         with open(fileName, 'wb') as f:
@@ -148,8 +143,10 @@ def downLoadPic(pic, url):
     logDownLoadList = open(swapFile, mode="a+")
     logDownLoadList.write(pic + '\t' + url + '\n')
     logDownLoadList.close()
+    
     pwd = os.getcwd()
     logging.debug('Present Directory... %s' % (pwd))
+    
     if os.path.exists(fileName):
         logging.info('FileFound %s' % (fileName))
         return True
@@ -195,17 +192,14 @@ def grabPrevURL(url):
 #snapPage('https://xkcd.com/2080')
 #downLoadPic("firstPic", "http://imgs.xkcd.com/comics/circuit_diagram.png")
 #grabPrevURL(mainUrl)
-
-
-
 if __name__ == '__main__':
     main()
-    
+    logging.debug('Start of Program')
     pic, url = snapPage(mainUrl)
     logging.debug('PIC: %s -- URL: %s' % (pic, url))
     cont = downLoadPic(pic, url)
     nextUrl = grabPrevURL(mainUrl)
-
+    
         
     while cont == True:
         logging.debug('grabing set nextUrl: %s' % (nextUrl))
@@ -215,6 +209,9 @@ if __name__ == '__main__':
         logging.debug('bool value of cont: %s' % (cont))
         nextUrl = grabPrevURL(nextUrl)
         logging.debug('setting nextUrl: %s' % (nextUrl))
+        print('LOOP')
+        
+    logging.debug('End of Program')
 
 
         
