@@ -59,7 +59,7 @@ def snapPage(url):
 
     soup = bs4.BeautifulSoup(res.text, 'html.parser')
     csoup = str(soup.select("[id~=comic]"))
-    logging.debug('soup: %s' % (soup))
+    logging.debug('csoup: %s' % (csoup))
     
     dsoup = csoup.split(" ") #create a list
     
