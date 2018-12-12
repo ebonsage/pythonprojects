@@ -6,10 +6,23 @@
   Created: 12/12/2018
 """
 
-import os, sys, pprint, pafy, logging
+import os, sys, pafy, logging
 
+url = "https://www.youtube.com/watch?v=SLsTskih7_I"
+dlcheck = False  #dlcheck - Set to "True" to download - Set to "False for dryrun"
+video = pafy.new(url)
 downloadFolder = 'C:\\youtube_videoDownlods'
 loggingFile = '%s\\Program_Log' % (downloadFolder)
+vidTitle = video.title
+vidRating = video.rating
+vidViews = video.viewcount
+vidAuthor = video.author
+vidLength = video.length
+vidDuration = video.duration
+vidLikes = video.likes
+vidDislikes = video.dislikes
+vidDesc = video.description
+
 
 if not os.path.exists(loggingFile):    
     swap = open(loggingFile, mode='w+')
@@ -31,54 +44,42 @@ os.chdir(downloadFolder)
 pwd = os.getcwd()
 logging.info('PWD:  %s' % (pwd))
 
-pp = pprint.pprint
-url = "https://www.youtube.com/watch?v=uyr7GPMX050"
-video = pafy.new(url)
-
-vidTitle = video.title
-vidRating = video.rating
-vidViews = video.viewcount
-vidAuthor = video.author
-vidLength = video.length
-
-vidDuration = video.duration
-vidLikes = video.likes
-vidDislikes = video.dislikes
-vidDesc = video.description
-
-pp(vidDesc)
-pp(vidLikes)
-pp(vidTitle)
-
 streams = video.streams
+
+
 
 for s in streams:
     print(s)
     print(s.resolution, s.extension, s.get_filesize(), s.url)
-
+    
+allstreams = video.allstreams
+for s in allstreams:
+    print(s.mediatype, s.extension, s.quality)
+    
 
 best = video.getbest()
-bestPref = video.getbest(preftype='mp4') #mv4,webm,flv,3gp 
-
-
+bestPref = video.getbest(preftype='webm') #mv4,webm,flv,3gp 
 
 #get url, for download of streaming in vlc
-pp('BEST URL')
-pp(best.url)
-pp('BEST PREF URL')
-pp(bestPref.url)
+#print('BEST URL')
+#print(best.url)
+#print('BEST PREF URL')
+#print(bestPref.url)
 
 filename_path = "%s\\%s." % (downloadFolder, vidTitle)
 
 
 if not os.path.exists(filename_path):
     logging.info('File to Download:  %s' % (filename_path))
-    #filename = best.download(filepath=filename_path + best.extension)
+    if dlcheck == True:
+        filename = best.download(filepath=filename_path + best.extension)
+    print("Best video file available to download is: %s and has finished downloading." % (best))
 
 
-audiostreams = video.audiostreams
-for a in audiostreams:
-    print(a.bitrate, a.extension, a.get_filesize())
+
+#audiostreams = video.audiostreams
+#for a in audiostreams:
+    #print(a.bitrate, a.extension, a.get_filesize())
 
 
 
@@ -96,13 +97,12 @@ audiostreams[1].download()
 
 """
 
-bestAudio = video.getbestaudio()
-bestAudioPref = video.getbestaudio(preftype="m4a")
+#bestAudio = video.getbestaudio()
+#bestAudioPref = video.getbestaudio(preftype="m4a")
+#bestBitRate = bestAudio.bitrate
 
-bestBitRate = bestAudio.bitrate
-
-print(bestAudio)
-print(bestBitRate)
+#print(bestAudio)
+#print(bestBitRate)
 
 
 
