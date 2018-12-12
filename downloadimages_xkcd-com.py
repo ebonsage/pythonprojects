@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding:utf-8
-#coreyjones
+#coreyjones 
 
 """
   Author: coreyjones  --<>
@@ -13,6 +13,22 @@ mainUrl = 'https://xkcd.com'
 downloadFolder = 'C:\\picbot'
 swapFile = '%s\\pic_names.txt' % (downloadFolder)
 loggingFile = '%s\\DEBUGLog.txt' % (downloadFolder)
+
+if not os.path.exists(loggingFile):    
+    swap = open(loggingFile, mode='w+')
+    swap.write('BEGIN DEBUG LOG' + '\n\n\n\n')
+    swap.close()
+    
+assert os.path.exists(loggingFile), 'Download folder is missing; doesn\'t exist: ' + str(loggingFile)
+    
+#logging.disable(logging.DEBUG)
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+#logging.basicConfig(filename=loggingFile, level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+#logging.DEBUG
+#logging.INFO
+#logging.WARNING
+#logging.ERROR
+#logging.CRITICAL
 
 #----------------------------------------------------------------------
 def main():
@@ -32,22 +48,6 @@ def main():
         swap.close()
     
     assert os.path.exists(swapFile), 'Download folder is missing; doesn\'t exist: ' + str(swapFile)
-    
-    if not os.path.exists(loggingFile):    
-        swap = open(loggingFile, mode='w+')
-        swap.write('BEGIN DEBUG LOG' + '\n\n\n\n')
-        swap.close()
-        
-    assert os.path.exists(loggingFile), 'Download folder is missing; doesn\'t exist: ' + str(loggingFile)
-        
-    #logging.disable(logging.DEBUG)
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-    #logging.basicConfig(filename=loggingFile, level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-    #logging.DEBUG
-    #logging.INFO
-    #logging.WARNING
-    #logging.ERROR
-    #logging.CRITICAL
     
             
 #----------------------------------------------------------------------
@@ -70,8 +70,8 @@ def snapPage(url):
             logging.debug('soup index %s: ' % (dsoup[i]))
             peek = dsoup[i]
             suffix = 'png"'
-            suffix2 = 'jpg"'
-            if peek.endswith(suffix) or peek.endswith(suffix2):
+            suffix1 = 'jpg"'
+            if peek.endswith(suffix) or peek.endswith(suffix1):
                 ln = peek
                 logging.info('ln is %s ' % (ln))
                 
