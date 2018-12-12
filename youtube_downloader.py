@@ -2,13 +2,13 @@
 #coding:utf-8
 """
   Author:  coreyjones --<>
-  Purpose: 
+  Purpose: Download YouTube Audio and Video Files.
   Created: 12/12/2018
 """
 
-import os, sys, pafy, logging
+import os, pafy, logging
 
-url = "https://www.youtube.com/watch?v=SLsTskih7_I"
+url = "https://www.youtube.com/watch?v=SLsTskih7_I"  #YouTube Video Link
 dlcheck = False  #dlcheck - Set to "True" to download - Set to "False for dryrun"
 video = pafy.new(url)
 downloadFolder = 'C:\\youtube_videoDownlods'
@@ -22,7 +22,6 @@ vidDuration = video.duration
 vidLikes = video.likes
 vidDislikes = video.dislikes
 vidDesc = video.description
-
 
 if not os.path.exists(loggingFile):    
     swap = open(loggingFile, mode='w+')
@@ -46,8 +45,6 @@ logging.info('PWD:  %s' % (pwd))
 
 streams = video.streams
 
-
-
 for s in streams:
     print(s)
     print(s.resolution, s.extension, s.get_filesize(), s.url)
@@ -56,8 +53,7 @@ allstreams = video.allstreams
 for s in allstreams:
     print(s.mediatype, s.extension, s.quality)
     
-
-best = video.getbest()
+best = video.getbest() # it's not downlaoding the absolute best file.
 bestPref = video.getbest(preftype='webm') #mv4,webm,flv,3gp 
 
 #get url, for download of streaming in vlc
@@ -68,22 +64,23 @@ bestPref = video.getbest(preftype='webm') #mv4,webm,flv,3gp
 
 filename_path = "%s\\%s." % (downloadFolder, vidTitle)
 
-
 if not os.path.exists(filename_path):
+    logging.info('filepath:  %s' % (filename_path))
     logging.info('File to Download:  %s' % (filename_path))
     if dlcheck == True:
         filename = best.download(filepath=filename_path + best.extension)
     print("Best video file available to download is: %s and has finished downloading." % (best))
+    
+print("Video Title: %s" % (vidTitle))
+print("Video Author: %s" % (vidAuthor))
+print("Views: %s" % (vidViews))
+print("Likes: %s Dislikes: %s\n\n" % (vidLikes, vidDislikes))
+print("Description: %s" % (vidDesc))
 
-
-
+audioHelp = """   
 #audiostreams = video.audiostreams
 #for a in audiostreams:
     #print(a.bitrate, a.extension, a.get_filesize())
-
-
-
-audioHelp = """   
 
 256k m4a 331379079
 192k ogg 172524223
@@ -95,40 +92,10 @@ Downlad the 2nd audio stream from above list.
 
 audiostreams[1].download()
 
-"""
-
 #bestAudio = video.getbestaudio()
 #bestAudioPref = video.getbestaudio(preftype="m4a")
 #bestBitRate = bestAudio.bitrate
 
 #print(bestAudio)
 #print(bestBitRate)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#if __name__ == '__main__':
-    #unittest.main()
+"""
